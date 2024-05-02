@@ -12,7 +12,7 @@ using Quizandfeedback.data;
 namespace Quizandfeedback.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240501055034_initialcreate")]
+    [Migration("20240502045351_initialcreate")]
     partial class initialcreate
     {
         /// <inheritdoc />
@@ -253,6 +253,11 @@ namespace Quizandfeedback.Migrations
 
                     b.Property<int>("QuestionNo")
                         .HasColumnType("int");
+
+                    b.Property<string>("QuestionType")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(30)");
 
                     b.Property<Guid>("QuizId")
                         .HasColumnType("char(36)");

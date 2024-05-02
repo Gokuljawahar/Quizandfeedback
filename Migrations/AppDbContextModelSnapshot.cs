@@ -251,6 +251,11 @@ namespace Quizandfeedback.Migrations
                     b.Property<int>("QuestionNo")
                         .HasColumnType("int");
 
+                    b.Property<string>("QuestionType")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(30)");
+
                     b.Property<Guid>("QuizId")
                         .HasColumnType("char(36)");
 

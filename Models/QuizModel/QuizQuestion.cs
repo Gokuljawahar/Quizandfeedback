@@ -31,6 +31,9 @@ namespace Quizandfeedback.models
         public Guid QuizQuestionId { get; set; }
         public Guid QuizId { get; set; }
         public int QuestionNo { get; set; }
+        
+        [StringLength(30)]
+        public string QuestionType { get; set; } 
 
         [Required]
         public string Question { get; set; }

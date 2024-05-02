@@ -47,7 +47,6 @@ namespace Quizandfeedback.models
         public string ModifiedBy { get; set; }
         public DateTime ModifiedAt { get; set; }
 
-        // Navigation properties
         public ICollection<QuizQuestion> QuizQuestions { get; set; }
     }
 }
