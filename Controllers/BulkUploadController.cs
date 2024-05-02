@@ -66,6 +66,7 @@ namespace Quizandfeedback.Controllers
                                     {
                                         quizQuestion.Options[i] = option;
                                     }
+                                    j=j + 1;
                                 }
 
                                 quizQuestions.Add(quizQuestion);
@@ -130,7 +131,7 @@ namespace Quizandfeedback.Controllers
                                 int k = 4;
                                 for (int i = 0; i < 12; i++)
                                 {
-                                    string? option = worksheet.Cells[row, j].Value?.ToString();
+                                    string? option = worksheet.Cells[row, k].Value?.ToString();
                                     if (option != null)
                                     {
                                         quizQuestion.Options[i] = option;
