@@ -36,24 +36,112 @@ namespace Quizandfeedback.Controllers
 
                         for (int row = 2; row <= worksheet.Dimension.End.Row; row++)
                         {
-                            QuizQuestionViewModel quizQuestion = new QuizQuestionViewModel
+                            string type = worksheet.Cells[row, 2].Value.ToString();
+
+                            if (type == "MCQ")
                             {
-                                Question = worksheet.Cells[row, 1].Value.ToString(),
-                                Options = new List<string>
+                                QuizQuestionViewModel quizQuestion = new QuizQuestionViewModel
                                 {
-                                    worksheet.Cells[row, 2].Value.ToString(),
-                                    worksheet.Cells[row, 3].Value.ToString(),
-                                    worksheet.Cells[row, 4].Value.ToString(),
-                                    worksheet.Cells[row, 5].Value.ToString()
-                                    
-                                },
-                                UserAnswer = worksheet.Cells[row, 6].Value.ToString()
-                            };
+                                    QuestionType = type,
+                                    QuestionNumber = worksheet.Cells[row, 1].Value.ToString(),
+                                    Question = worksheet.Cells[row, 3].Value.ToString(),
+                                    CorrectOptions = new string[3],
+                                    Options = new string[8]
 
-                            quizQuestions.Add(quizQuestion);
+                                };
+
+                                for (int i = 0; i < 1; i++)
+                                {
+                                    string? correctoption = worksheet.Cells[row, 12].Value?.ToString();
+                                    if (correctoption != null)
+                                    {
+                                        quizQuestion.CorrectOptions[i] = correctoption;
+                                    }
+                                }
+                                int j = 4;
+                                for (int i = 0; i < 4; i++)
+                                {
+                                    string? option = worksheet.Cells[row, j].Value?.ToString();
+                                    if (option != null)
+                                    {
+                                        quizQuestion.Options[i] = option;
+                                    }
+                                }
+
+                                quizQuestions.Add(quizQuestion);
+                            }
+
+                            else if (type == "TF")
+                            {
+                                QuizQuestionViewModel quizQuestion = new QuizQuestionViewModel
+                                {
+                                    QuestionType = type,
+                                    QuestionNumber = worksheet.Cells[row, 1].Value.ToString(),
+                                    Question = worksheet.Cells[row, 3].Value.ToString(),
+                                    CorrectOptions = new string[3],
+                                    Options = new string[8]
+                                };
+
+                                for (int i = 0; i < 1; i++)
+                                {
+                                    string? correctoption = worksheet.Cells[row, 12].Value?.ToString();
+                                    if (correctoption != null)
+                                    {
+                                        quizQuestion.CorrectOptions[i] = correctoption;
+                                    }
+                                }
+
+                                int j = 4;
+                                for (int i = 0; i < 4; i++)
+                                {
+                                    string? option = worksheet.Cells[row, j].Value?.ToString();
+                                    if (option != null)
+                                    {
+                                        quizQuestion.Options[i] = option;
+                                    }
+
+                                    j = j + 1;
+                                }
+
+                                quizQuestions.Add(quizQuestion);
+                            }
+
+                            else if (type == "MSQ")
+                            {
+                                QuizQuestionViewModel quizQuestion = new QuizQuestionViewModel
+                                {
+                                    QuestionType = type,
+                                    QuestionNumber = worksheet.Cells[row, 1].Value.ToString(),
+                                    Question = worksheet.Cells[row, 3].Value.ToString(),
+                                    CorrectOptions = new string[3],
+                                    Options = new string[8]
+                                };
+                                int j = 12;
+                                for (int i = 0; i < 3; i++)
+                                {
+                                    string? correctoption = worksheet.Cells[row, j].Value?.ToString();
+                                    if (correctoption != null)
+                                    {
+                                        quizQuestion.CorrectOptions[i] = correctoption;
+                                    }
+                                    j = j + 1;
+                                }
+
+                                int k = 4;
+                                for (int i = 0; i < 12; i++)
+                                {
+                                    string? option = worksheet.Cells[row, j].Value?.ToString();
+                                    if (option != null)
+                                    {
+                                        quizQuestion.Options[i] = option;
+                                    }
+                                    k = k + 1;
+                                }
+
+                                quizQuestions.Add(quizQuestion);
+                            }
                         }
-
-                        return Ok(quizQuestions); // Return fetched data in the response body
+                        return Ok(quizQuestions);
                     }
                 }
             }
@@ -66,8 +154,10 @@ namespace Quizandfeedback.Controllers
 
     public class QuizQuestionViewModel
     {
+        public string QuestionNumber { get; set; }
+        public string QuestionType { get; set; }
         public string Question { get; set; }
-        public List<string> Options { get; set; }
-        public string UserAnswer { get; set; }
+        public string[] Options { get; set; }
+        public string[] CorrectOptions { get; set; }
     }
 }
