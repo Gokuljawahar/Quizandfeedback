@@ -198,7 +198,7 @@ namespace Quizandfeedback.Controllers
 
                         List<QuizQuestionViewModel> quizQuestions = new List<QuizQuestionViewModel>();
 
-                        for (int row = 2; row <= worksheet.Dimension.End.Row; row++)
+                        for (int row = 3; row <= worksheet.Dimension.End.Row; row++)
                         {
                             string type = worksheet.Cells[row, 2].Value.ToString();
 
@@ -209,8 +209,8 @@ namespace Quizandfeedback.Controllers
                                     QuestionType = type,
                                     QuestionNumber = worksheet.Cells[row, 1].Value.ToString(),
                                     Question = worksheet.Cells[row, 3].Value.ToString(),
-                                    CorrectOptions = new string[3],
-                                    Options = new string[8]
+                                    CorrectOptions = new string[1],
+                                    Options = new string[4]
                                 };
 
                                 for (int i = 0; i < 1; i++)
@@ -242,8 +242,8 @@ namespace Quizandfeedback.Controllers
                                     QuestionType = type,
                                     QuestionNumber = worksheet.Cells[row, 1].Value.ToString(),
                                     Question = worksheet.Cells[row, 3].Value.ToString(),
-                                    CorrectOptions = new string[3],
-                                    Options = new string[8]
+                                    CorrectOptions = new string[1],
+                                    Options = new string[2]
                                 };
 
                                 for (int i = 0; i < 1; i++)
