@@ -1,20 +1,4 @@
-// namespace Quizandfeedback.models{
-//     public class QuizQuestion
-// {
-//     public int QuizQuestionId { get; set; }
-//     public int QuizId { get; set; }
-//     public int QuestionNo { get; set; }
-//     public string Question { get; set; }
-//     public string CreatedBy { get; set; }
-//     public DateTime CreatedAt { get; set; }
-//     public string ModifiedBy { get; set; }
-//     public DateTime ModifiedAt { get; set; }
 
-//     // Navigation properties
-//     public Quiz Quiz { get; set; }
-//     public ICollection<QuestionOption> QuestionOptions { get; set; }
-// }
-// }
 using System.ComponentModel.DataAnnotations;
 
 namespace Quizandfeedback.models

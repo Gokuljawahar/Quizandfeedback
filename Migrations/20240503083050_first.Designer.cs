@@ -12,8 +12,8 @@ using Quizandfeedback.data;
 namespace Quizandfeedback.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240502045351_initialcreate")]
-    partial class initialcreate
+    [Migration("20240503083050_first")]
+    partial class first
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
