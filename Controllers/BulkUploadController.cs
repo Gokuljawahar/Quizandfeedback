@@ -1,175 +1,12 @@
-﻿// using System;
-// using System.Collections.Generic;
-// using System.IO;
-// using System.Linq;
-// using Microsoft.AspNetCore.Http;
-// using Microsoft.AspNetCore.Mvc;
-// using OfficeOpenXml;
-// using Quizandfeedback.models;
-
-// namespace Quizandfeedback.Controllers
-// {
-//     [Route("api/[controller]")]
-//     [ApiController]
-//     public class ExcelController : ControllerBase
-//     {
-//         [HttpPost("ImportQuizData")]
-//         public IActionResult ImportQuizData(IFormFile file)
-//         {
-//             try
-//             {
-//                 if (file == null || file.Length <= 0)
-//                     return BadRequest("File is empty.");
-
-//                 using (var stream = new MemoryStream())
-//                 {
-//                     file.CopyTo(stream);
-//                     stream.Position = 0;
-
-//                     using (ExcelPackage package = new ExcelPackage(stream))
-//                     {
-//                         ExcelWorksheet worksheet = package.Workbook.Worksheets.FirstOrDefault();
-//                         if (worksheet == null)
-//                             return BadRequest("Worksheet not found.");
-
-//                         List<QuizQuestionViewModel> quizQuestions = new List<QuizQuestionViewModel>();
-
-//                         for (int row = 2; row <= worksheet.Dimension.End.Row; row++)
-//                         {
-//                             string type = worksheet.Cells[row, 2].Value.ToString();
-
-//                             if (type == "MCQ")
-//                             {
-//                                 QuizQuestionViewModel quizQuestion = new QuizQuestionViewModel
-//                                 {
-//                                     QuestionType = type,
-//                                     QuestionNumber = worksheet.Cells[row, 1].Value.ToString(),
-//                                     Question = worksheet.Cells[row, 3].Value.ToString(),
-//                                     CorrectOptions = new string[3],
-//                                     Options = new string[8]
-
-//                                 };
-
-//                                 for (int i = 0; i < 1; i++)
-//                                 {
-//                                     string? correctoption = worksheet.Cells[row, 12].Value?.ToString();
-//                                     if (correctoption != null)
-//                                     {
-//                                         quizQuestion.CorrectOptions[i] = correctoption;
-//                                     }
-//                                 }
-//                                 int j = 4;
-//                                 for (int i = 0; i < 4; i++)
-//                                 {
-//                                     string? option = worksheet.Cells[row, j].Value?.ToString();
-//                                     if (option != null)
-//                                     {
-//                                         quizQuestion.Options[i] = option;
-//                                     }
-//                                     j=j + 1;
-//                                 }
-
-//                                 quizQuestions.Add(quizQuestion);
-//                             }
-
-//                             else if (type == "TF")
-//                             {
-//                                 QuizQuestionViewModel quizQuestion = new QuizQuestionViewModel
-//                                 {
-//                                     QuestionType = type,
-//                                     QuestionNumber = worksheet.Cells[row, 1].Value.ToString(),
-//                                     Question = worksheet.Cells[row, 3].Value.ToString(),
-//                                     CorrectOptions = new string[3],
-//                                     Options = new string[8]
-//                                 };
-
-//                                 for (int i = 0; i < 1; i++)
-//                                 {
-//                                     string? correctoption = worksheet.Cells[row, 12].Value?.ToString();
-//                                     if (correctoption != null)
-//                                     {
-//                                         quizQuestion.CorrectOptions[i] = correctoption;
-//                                     }
-//                                 }
-
-//                                 int j = 4;
-//                                 for (int i = 0; i < 4; i++)
-//                                 {
-//                                     string? option = worksheet.Cells[row, j].Value?.ToString();
-//                                     if (option != null)
-//                                     {
-//                                         quizQuestion.Options[i] = option;
-//                                     }
-
-//                                     j = j + 1;
-//                                 }
-
-//                                 quizQuestions.Add(quizQuestion);
-//                             }
-
-//                             else if (type == "MSQ")
-//                             {
-//                                 QuizQuestionViewModel quizQuestion = new QuizQuestionViewModel
-//                                 {
-//                                     QuestionType = type,
-//                                     QuestionNumber = worksheet.Cells[row, 1].Value.ToString(),
-//                                     Question = worksheet.Cells[row, 3].Value.ToString(),
-//                                     CorrectOptions = new string[3],
-//                                     Options = new string[8]
-//                                 };
-//                                 int j = 12;
-//                                 for (int i = 0; i < 3; i++)
-//                                 {
-//                                     string? correctoption = worksheet.Cells[row, j].Value?.ToString();
-//                                     if (correctoption != null)
-//                                     {
-//                                         quizQuestion.CorrectOptions[i] = correctoption;
-//                                     }
-//                                     j = j + 1;
-//                                 }
-
-//                                 int k = 4;
-//                                 for (int i = 0; i < 12; i++)
-//                                 {
-//                                     string? option = worksheet.Cells[row, k].Value?.ToString();
-//                                     if (option != null)
-//                                     {
-//                                         quizQuestion.Options[i] = option;
-//                                     }
-//                                     k = k + 1;
-//                                 }
-
-//                                 quizQuestions.Add(quizQuestion);
-//                             }
-//                         }
-//                         return Ok(quizQuestions);
-//                     }
-//                 }
-//             }
-//             catch (Exception ex)
-//             {
-//                 return StatusCode(500, $"An error occurred: {ex.Message}");
-//             }
-//         }
-//     }
-
-//     public class QuizQuestionViewModel
-//     {
-//         public string QuestionNumber { get; set; }
-//         public string QuestionType { get; set; }
-//         public string Question { get; set; }
-//         public string[] Options { get; set; }
-//         public string[] CorrectOptions { get; set; }
-//     }
-// }
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using OfficeOpenXml;
+using Quizandfeedback.data;
+using Quizandfeedback.models;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using OfficeOpenXml;
-using Quizandfeedback.models;
 
 namespace Quizandfeedback.Controllers
 {
@@ -177,6 +14,13 @@ namespace Quizandfeedback.Controllers
     [ApiController]
     public class ExcelController : ControllerBase
     {
+        private readonly AppDbContext _context;
+
+        public ExcelController(AppDbContext context)
+        {
+            _context = context;
+        }
+
         [HttpPost("ImportQuizData")]
         public IActionResult ImportQuizData(IFormFile file)
         {
@@ -197,131 +41,94 @@ namespace Quizandfeedback.Controllers
                             return BadRequest("Worksheet not found.");
 
                         List<QuizQuestionViewModel> quizQuestions = new List<QuizQuestionViewModel>();
+                        List<QuizQuestion> questionEntities = new List<QuizQuestion>(); // List to store question entities
 
-                        for (int row = 2; row <= worksheet.Dimension.End.Row; row++)
+                        for (int row = 3; row <= worksheet.Dimension.End.Row; row++)
                         {
-                            string type = worksheet.Cells[row, 2].Value.ToString();
+                            string? type = worksheet.Cells[row, 2].Value?.ToString();
 
-                            if (type == "MCQ")
+                            if (type == "MCQ" || type == "TF" || type == "MSQ")
                             {
                                 QuizQuestionViewModel quizQuestion = new QuizQuestionViewModel
                                 {
                                     QuestionType = type,
-                                    QuestionNumber = worksheet.Cells[row, 1].Value.ToString(),
+                                    QuestionNumber = Convert.ToInt32(worksheet.Cells[row, 1].Value),
                                     Question = worksheet.Cells[row, 3].Value.ToString(),
-                                    CorrectOptions = new string[3],
-                                    Options = new string[8]
                                 };
 
-                                for (int i = 0; i < 1; i++)
+                                // Extracting options and correct options based on question type
+                                if (type == "MCQ")
                                 {
-                                    string? correctoption = worksheet.Cells[row, 12].Value?.ToString();
-                                    if (correctoption != null && i < quizQuestion.CorrectOptions.Length)
-                                    {
-                                        quizQuestion.CorrectOptions[i] = correctoption;
-                                    }
+                                    quizQuestion.Options = ExtractOptions(worksheet, row, 4, 4);
+                                    quizQuestion.CorrectOptions = ExtractOptions(worksheet, row, 12, 1);
                                 }
-
-                                int j = 4;
-                                for (int i = 0; i < 4; i++)
+                                else if (type == "TF")
                                 {
-                                    string? option = worksheet.Cells[row, j].Value?.ToString();
-                                    if (option != null && i < quizQuestion.Options.Length)
-                                    {
-                                        quizQuestion.Options[i] = option;
-                                    }
-                                    j = j + 1;
+                                    quizQuestion.Options = ExtractOptions(worksheet, row, 4, 2);
+                                    quizQuestion.CorrectOptions = ExtractOptions(worksheet, row, 12, 1);
+                                }
+                                else if (type == "MSQ")
+                                {
+                                    quizQuestion.Options = ExtractOptions(worksheet, row, 4, 8);
+                                    quizQuestion.CorrectOptions = ExtractOptions(worksheet, row, 12, 3);
                                 }
 
                                 quizQuestions.Add(quizQuestion);
-                            }
-                            else if (type == "TF")
-                            {
-                                QuizQuestionViewModel quizQuestion = new QuizQuestionViewModel
+
+                                QuizQuestion questionEntity = new QuizQuestion
                                 {
-                                    QuestionType = type,
-                                    QuestionNumber = worksheet.Cells[row, 1].Value.ToString(),
-                                    Question = worksheet.Cells[row, 3].Value.ToString(),
-                                    CorrectOptions = new string[3],
-                                    Options = new string[8]
+                                    QuizId = Guid.Parse("fa85f642-5717-4562-b3fc-2c963f66afa6"),
+                                    QuestionNo = quizQuestion.QuestionNumber,
+                                    QuestionType = quizQuestion.QuestionType,
+                                    Question = quizQuestion.Question,
+                                    CreatedBy = "Admin",
+                                    ModifiedBy = "Admin2"
                                 };
 
-                                for (int i = 0; i < 1; i++)
-                                {
-                                    string? correctoption = worksheet.Cells[row, 12].Value?.ToString();
-                                    if (correctoption != null && i < quizQuestion.CorrectOptions.Length)
-                                    {
-                                        quizQuestion.CorrectOptions[i] = correctoption;
-                                    }
-                                }
+                                questionEntities.Add(questionEntity); // Add questionEntity to the list
 
-                                int j = 4;
-                                for (int i = 0; i < 4; i++)
-                                {
-                                    string? option = worksheet.Cells[row, j].Value?.ToString();
-                                    if (option != null && i < quizQuestion.Options.Length)
-                                    {
-                                        quizQuestion.Options[i] = option;
-                                    }
-                                    j = j + 1;
-                                }
-
-                                quizQuestions.Add(quizQuestion);
-                            }
-                            else if (type == "MSQ")
-                            {
-                                QuizQuestionViewModel quizQuestion = new QuizQuestionViewModel
-                                {
-                                    QuestionType = type,
-                                    QuestionNumber = worksheet.Cells[row, 1].Value.ToString(),
-                                    Question = worksheet.Cells[row, 3].Value.ToString(),
-                                    CorrectOptions = new string[3],
-                                    Options = new string[8]
-                                };
-
-                                int j = 12;
-                                for (int i = 0; i < 3; i++)
-                                {
-                                    string? correctoption = worksheet.Cells[row, j].Value?.ToString();
-                                    if (correctoption != null && i < quizQuestion.CorrectOptions.Length)
-                                    {
-                                        quizQuestion.CorrectOptions[i] = correctoption;
-                                    }
-                                    j = j + 1;
-                                }
-
-                                int k = 4;
-                                for (int i = 0; i < 8; i++)
-                                {
-                                    string? option = worksheet.Cells[row, k].Value?.ToString();
-                                    if (option != null && i < quizQuestion.Options.Length)
-                                    {
-                                        quizQuestion.Options[i] = option;
-                                    }
-                                    k = k + 1;
-                                }
-
-                                quizQuestions.Add(quizQuestion);
                             }
                         }
 
-                        return Ok(quizQuestions);
+                        foreach (var questionEntity in questionEntities)
+                        {
+                            _context.QuizQuestions.Add(questionEntity); // Add each questionEntity to the DbSet individually
+                        }
+
+                        // Save changes to the database
+                        _context.SaveChanges();
+
+                        // Return questionEntities
+                        return Ok(questionEntities);
                     }
                 }
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"An error occurred: {ex.Message}");
+                // Return an error response along with inner exception details
+                return StatusCode(500, $"An error occurred while saving changes: {ex.Message}. Inner Exception: {ex.InnerException?.Message}");
             }
+        }
+
+        // Helper method to extract options from Excel worksheet
+        private string[] ExtractOptions(ExcelWorksheet worksheet, int row, int startColumn, int count)
+        {
+            string[] options = new string[count];
+            for (int i = 0; i < count; i++)
+            {
+                string? option = worksheet.Cells[row, startColumn + i].Value?.ToString();
+                options[i] = option ?? "";
+            }
+            return options;
         }
     }
 
     public class QuizQuestionViewModel
     {
-        public string QuestionNumber { get; set; }
+        public int QuestionNumber { get; set; }
         public string QuestionType { get; set; }
         public string Question { get; set; }
-        public string[] Options { get; set; } = new string[8];
-        public string[] CorrectOptions { get; set; } = new string[3];
+        public string[] Options { get; set; }
+        public string[] CorrectOptions { get; set; }
     }
 }
