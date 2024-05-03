@@ -41,6 +41,7 @@ namespace Quizandfeedback.Controllers
                             return BadRequest("Worksheet not found.");
 
                         List<QuizQuestionViewModel> quizQuestions = new List<QuizQuestionViewModel>();
+                        List<QuizQuestion> questionEntities = new List<QuizQuestion>(); // List to store question entities
 
                         for (int row = 3; row <= worksheet.Dimension.End.Row; row++)
                         {
@@ -74,7 +75,6 @@ namespace Quizandfeedback.Controllers
 
                                 quizQuestions.Add(quizQuestion);
 
-                                // Adding QuizQuestion to context
                                 QuizQuestion questionEntity = new QuizQuestion
                                 {
                                     QuizId = Guid.Parse("fa85f642-5717-4562-b3fc-2c963f66afa6"),
@@ -85,20 +85,28 @@ namespace Quizandfeedback.Controllers
                                     ModifiedBy = "Admin2"
                                 };
 
-                                //_context.Add(questionEntity);
+                                questionEntities.Add(questionEntity); // Add questionEntity to the list
+
                             }
                         }
 
-                        // Save changes to the database context
-                        //_context.SaveChanges();
+                        foreach (var questionEntity in questionEntities)
+                        {
+                            _context.QuizQuestions.Add(questionEntity); // Add each questionEntity to the DbSet individually
+                        }
 
-                        return Ok(quizQuestions);
+                        // Save changes to the database
+                        _context.SaveChanges();
+
+                        // Return questionEntities
+                        return Ok(questionEntities);
                     }
                 }
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"An error occurred: {ex.Message}");
+                // Return an error response along with inner exception details
+                return StatusCode(500, $"An error occurred while saving changes: {ex.Message}. Inner Exception: {ex.InnerException?.Message}");
             }
         }
 
