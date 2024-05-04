@@ -77,7 +77,11 @@ namespace Quizandfeedback.Controllers
                         
                                 QuizQuestion questionEntity = new QuizQuestion
                                 {
+<<<<<<< HEAD
+                                    QuizId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6"),
+=======
                                     QuizId = Guid.Parse("d1ff3f43-abb2-42f2-b7b7-f65cb28ec4d7"),
+>>>>>>> d5703adc4caaef662f887093e0b68ae228cbcb11
                                     QuestionNo = quizQuestion.QuestionNumber,
                                     QuestionType = quizQuestion.QuestionType,
                                     Question = quizQuestion.Question,
