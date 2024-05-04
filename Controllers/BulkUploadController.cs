@@ -74,10 +74,10 @@ namespace Quizandfeedback.Controllers
                                 }
 
                                 quizQuestions.Add(quizQuestion);
-
+                        
                                 QuizQuestion questionEntity = new QuizQuestion
                                 {
-                                    QuizId = Guid.Parse("fa85f642-5717-4562-b3fc-2c963f66afa6"),
+                                    QuizId = Guid.Parse("d1ff3f43-abb2-42f2-b7b7-f65cb28ec4d7"),
                                     QuestionNo = quizQuestion.QuestionNumber,
                                     QuestionType = quizQuestion.QuestionType,
                                     Question = quizQuestion.Question,
@@ -96,6 +96,35 @@ namespace Quizandfeedback.Controllers
                         }
 
                         // Save changes to the database
+                        _context.SaveChanges();
+
+                        foreach (var quizQuestion in quizQuestions)
+                        {
+                            var questionEntity = questionEntities.FirstOrDefault(q => q.QuestionNo == quizQuestion.QuestionNumber);
+
+                            if (questionEntity != null)
+                            {
+                                // Create and add options
+                                for (int i = 0; i < quizQuestion.Options.Length; i++)
+                                {
+                                    // Check if option is not null or empty
+                                    if (!string.IsNullOrEmpty(quizQuestion.Options[i]))
+                                    {
+                                        var optionEntity = new QuestionOption
+                                        {
+                                            QuizQuestionId = questionEntity.QuizQuestionId,
+                                            Option = quizQuestion.Options[i],
+                                            IsCorrect = quizQuestion.CorrectOptions.Contains(quizQuestion.Options[i]),
+                                            CreatedBy = "Admin",
+                                            ModifiedBy = "Admin2"
+                                        };
+                                        _context.QuestionOptions.Add(optionEntity);
+                                    }
+                                }
+                            }
+                        }
+
+                        // Save changes to the database to store options
                         _context.SaveChanges();
 
                         // Return questionEntities
